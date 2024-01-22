@@ -2,11 +2,15 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { C1Component } from './components/c1/c1.component';
 import { C2Component } from './components/c2/c2.component';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, C1Component,C2Component],
+  imports: [RouterOutlet,
+    C1Component,
+    C2Component
+  ],
   template:`
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
@@ -48,8 +52,11 @@ import { C2Component } from './components/c2/c2.component';
   <app-c1></app-c1>
   <hr>
   <app-c2></app-c2>
+  <button (click)="btnClick()">Print environment</button>
   `
 })
 export class AppComponent {
-  
+  btnClick(){
+    console.log(environment);
+  }
 }
