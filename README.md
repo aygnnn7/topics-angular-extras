@@ -33,8 +33,9 @@ Note: Similarly, Class Binding can be done using `ClassName` with the same logic
 
 
 
-## APP_INITIALIZER Nedir?
-`APP_INITIALIZE`, Angular tarafindan saglanan built-in bir injection token'dir. Bu token sayesinde uygulama calismaya baslmadan once gelistiriciler tarafindan bazi kodlar yurutulebilmektedir. Bu kodlar: kimlik dogrulamasi, environment yapilandirmasi yahut api araciligiyla oncul veri yuklemeleri vs. gibi davranislar olabilir. Angular, APP_INITIALIZER tarafindan saglanan tum islevleri calistirip sonuclanana kadar uygulama baslangici bekleyecektir.
+## What is APP_INITIALIZER?
+`APP_INITIALIZER` is a built-in injection token provided by Angular. This token allows developers to execute certain code before the application starts running. These codes can include actions like authentication, environment configuration, preloading data via APIs, and more. Angular will delay the start of the application until all functions provided by `APP_INITIALIZER` are executed and completed. 
+
 For example:
 ```javascript
 bootstrapApplication(AppComponent, {
@@ -42,7 +43,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: () => {
-        //configurations here
+        // Configurations or initializations here
         console.log("Priority configurations have taken place.")
         return null;
       }
@@ -50,6 +51,7 @@ bootstrapApplication(AppComponent, {
   ]
 })
 ```
+In this example, a factory function is provided to `APP_INITIALIZER`, which logs a message. The application's startup process will wait until this function completes. This mechanism is particularly useful for initializing global settings, fetching configuration settings, or performing necessary checks before the application fully loads, ensuring that the application starts with all the required initial setups.
 
 ## Angular Runtime Configuration
 Many applications require runtime configuration information to be loaded at startup. For instance, the endpoints used by an application for data needs may differ in test, pre-prod, and prod environments. In Angular, `environment variables` exist to hold configuration data. However, since `environment variables` are defined at compile-time, they cannot be changed at runtime. Therefore, for runtime-configurable settings, we could use a database. But as this also requires storing necessary endpoints, the best practice is to keep configurations in files that can be deployed along with the application. For example, a configuration file can be stored in the `src/app/assets/config` directory and created in JSON or XML format.
@@ -109,3 +111,66 @@ export const environment = {
 To read environment variables, simply import the `environment.ts` file.
 
 To test, you can change the application's environment while launching it with `ng serve --configuration='production'`.
+
+## Communication with External Services using HttpClient Library
+In Angular architecture, data operations are typically managed through communication processes with APIs. For this, we need to send HTTP requests to APIs, which is generally accomplished using Angular's built-in `HttpClient` library. `HttpClient` is a ready-made library that facilitates sending `GET`, `POST`, `PUT`, and `DELETE` requests to APIs and receiving responses.
+
+### Using the HttpClient Library
+To use the HttpClient library, we first need to add the HttpClient service to the IoC (Inversion of Control) provider. This can be done in the `main.ts` file by adding `HttpClientModule` through the `bootstrapApplication` function:
+```javascript
+bootstrapApplication(AppComponent, {
+    providers: [
+        importProvidersFrom(HttpClientModule)
+    ]
+})
+```
+Once this module is provided, the HttpClient service can be injected at any required point in the application. Here's an example of using a `GET` request:
+```javascript
+constructor(private httpClient: HttpClient) {
+    httpClient.get("https://jsonplaceholder.typicode.com/posts")
+      .subscribe({
+        next: datas => console.log(datas),
+        error: error => console.log(error)
+      });
+}
+```
+Here, we use the `get` method of the library injected via the `constructor`. If the request is successful and we receive a response, it can be processed with `next`; if an error occurs, it can be accessed with `error`.
+
+Adding parameters to a request with HttpParams:
+```javascript
+var params = new HttpParams()
+      .set("id", "1");
+
+httpClient.get("https://jsonplaceholder.typicode.com/posts", {params})
+    .subscribe({
+        next: datas => console.log(datas),
+        error: error => console.log(error)
+    });
+```
+
+This can also be done using the `fromString` and `fromObject` features of HttpParams. Example of using `fromObject`:
+```javascript
+let params = new HttpParams({
+    fromObject: {
+        id: 1,
+        sort: "asc"
+    }
+})
+```
+
+### HttpHeaders
+In the communication process over HTTP protocol, the client and server can share additional information via HTTP Headers. Typically, in accessing endpoints that require authorization, the token representing authorization is sent to the server in these headers.
+
+Example:
+```javascript
+const headers = new HttpHeaders()
+    .set("name", "Jack")
+    .set("country", "Bulgaria");
+httpClient.get("https://jsonplaceholder.typicode.com/posts", {headers})
+    .subscribe({
+        next: datas => console.log(datas),
+        error: error => console.log(error)
+    });
+```
+
+This example demonstrates how headers can be used to pass additional data such as authorization tokens or other necessary information for the request.
