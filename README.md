@@ -174,3 +174,46 @@ httpClient.get("https://jsonplaceholder.typicode.com/posts", {headers})
 ```
 
 This example demonstrates how headers can be used to pass additional data such as authorization tokens or other necessary information for the request.
+
+## What is an Http Interceptor?
+An HTTP Interceptor in Angular is a mechanism that allows for central processing of HTTP requests made throughout the application. With this mechanism, HTTP requests made at the application level can be intercepted to manipulate the upcoming request. It also provides the opportunity to centrally modify the response that will be received as a result of these requests.
+
+### Usage of Http Interceptor
+There are several reasons why an HTTP Interceptor is needed, but the most important is for appending an Access Token to the headers of requests made to APIs requiring authentication. This way, we avoid the burden of adding an Access Token to each request. 
+
+Other usage scenarios include:
+- Error handling: Interceptors can be used to process errors from the server or to add specific error messages to requests.
+- Caching processes: Interceptors can be used to cache certain requests to prevent repetition.
+- Logging: Interceptors can log and trace requests and responses.
+
+### Creating an Http Interceptor
+We can easily create an interceptor with the command `ng g interceptor [name]`.
+
+Example usage:
+```javascript
+export const myInterceptor: HttpInterceptorFn = (req, next) => {
+  console.log('HTTP Interceptor is triggered...');
+  const newRequest = req.clone({
+    setHeaders:{
+      "Authorization": "example"
+    },
+    body: {
+      a: 'b'
+    }
+  });
+  console.log('The request has been manipulated and is ready to send.')
+  return next.handle(newRequest);
+};
+```
+
+To make this `myInterceptor` usable throughout the application, we simply need to provide it in `app.config.ts`.
+
+```javascript
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes), 
+    provideHttpClient(withInterceptors([myInterceptor]))
+  ]
+};
+```
+Now, any request made at any point in the application will first be intercepted by this interceptor, and the predefined operations will be executed. This makes the interceptor a powerful tool for maintaining consistency and efficiency in handling HTTP requests and responses across the application.
