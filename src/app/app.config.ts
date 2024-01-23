@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { myInterceptor } from './my.interceptor';
 import { HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,6 @@ export const appConfig: ApplicationConfig = {
         console.log("Priority configurations have taken place.")
         return null;
       }, deps: [HttpClient]
-    }
+    }, provideClientHydration()
   ]
 };
