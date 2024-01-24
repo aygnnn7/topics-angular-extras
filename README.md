@@ -232,3 +232,88 @@ SSR is used to speed up this process and to present the application to users mor
 By running `ng add @angular/ssr`, we include Angular Universal and the SSR behavior in our application.
 
 This addition transforms the Angular application into a platform where server-side rendering is enabled, significantly improving the initial loading performance and enhancing the app's visibility and indexability by search engines. This approach is particularly beneficial for applications that require robust SEO capabilities.
+
+## Signals
+
+**Signals** in Angular 16 are a new feature introduced to track changes in variable values and reactively notify when a change occurs. Unlike traditional variables, signals exhibit a reactive behavior, allowing them to respond to changes in their values.
+
+```javascript
+let x = 5;
+let y = 15;
+let z = x + y;
+console.log(z); // 20
+x = 10;
+console.log(z); // 20
+```
+
+In the above code, the value of `z` is calculated based on the initial values of `x` and `y`. However, changing the value of `x` later does not affect the already calculated value of `z`. If we want a variable to reactively respond to changes in `x` or `y`, we can use the following approach:
+
+```javascript
+get total() {
+  return this.x + this.y;
+}
+```
+
+This way, every time we call the `total` function, it dynamically calculates the sum of `x` and `y`. Alternatively, without adding an extra property or function, we can utilize **Signals** as follows:
+
+```javascript
+let x = signal(5);
+let y = 15;
+let z = computed(() => x() + y);
+console.log(z()); // 20
+x.set(10);
+console.log(z()); // 25
+```
+
+Here's the breakdown:
+- The `signal` function is used to track changes in the variable `x`.
+- The `computed` function recalculates the value of `z` whenever `x` changes.
+
+Signals provide excellent control over data changes, improve application performance, and offer an effective user experience in terms of change detection.
+
+### Signal - Zone.js Relationship
+
+While Zone.js manages asynchronous operations in Angular, providing an effective way to work with events and improve performance, **Signals** operate independently of Zone.js. This independence allows them to work more efficiently and performantly.
+
+### Signal Definition and Usage
+
+To define a signal, we use the `signal` function from `@angular/core`. Here's a simple example:
+
+```javascript
+import { signal } from '@angular/core';
+let x = signal(5);
+```
+
+### Signal Functions
+
+The `signal` function creates a writable and readable signal by default (`WritableSignal<type>`). To use the value of the signal, you simply call it like `x()`.
+
+The `set` function allows us to change the existing value of the signal. Note that if multiple consecutive `set` operations are performed, Angular will only update the template for the final result, optimizing performance.
+
+The `update` function performs operations on the current value. For example:
+
+```javascript
+this.x.update(data => data + 1);
+```
+
+The `computed` function creates a function that depends on one or more signals, and it reacts to changes in those signals. It dynamically handles dependencies, making it flexible for dynamic behavior.
+
+### `effect` Function
+
+The `effect` function is used to execute code when the value of a signal changes. It is typically used in the constructor and can be helpful for various scenarios such as logging, synchronization, or adding custom DOM behaviors.
+
+To prevent an effect from triggering when a signal changes, we can use the `untracked` function. For example:
+
+```javascript
+effect(() => {
+  console.log(`x current value: ${this.x()}`);
+  untracked(() => {
+    this.y.update(data => data - 1);
+    console.log(`y current value: ${this.y()}`);
+  });
+});
+```
+
+### RxJS Interop
+
+Angular introduces interoperability between observables and signals using `toSignal` and `toObservable` functions. It's important to use these functions at the constructor level to avoid errors. Additionally, when using `toSignal`, you may want to provide an initial value using the `initialValue` property.
