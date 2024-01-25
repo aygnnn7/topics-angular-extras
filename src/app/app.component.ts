@@ -5,6 +5,7 @@ import { C2Component } from './components/c2/c2.component';
 import { environment } from '../environments/environment';
 import { HttpClientExampleComponent } from './components/http-client-example/http-client-example.component';
 import { SignalsExampleComponent } from './components/signals-example/signals-example.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -61,10 +62,17 @@ import { SignalsExampleComponent } from './components/signals-example/signals-ex
   <app-http-client-example></app-http-client-example>
   <hr> 
   <app-signals-example></app-signals-example>
+  <hr>
+  <button (click)="throwError()"> Throw Error</button>
   `
 })
 export class AppComponent {
   btnClick(){
     console.log(environment);
   }
+
+  throwError(){
+    throw new Error("We got a problem here...")
+  }
+  
 }

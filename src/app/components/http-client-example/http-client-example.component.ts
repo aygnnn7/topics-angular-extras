@@ -15,11 +15,12 @@ export class HttpClientExampleComponent {
     var params = new HttpParams()
       .set("id", "1");
 
-    httpClient.get("https://jsonplaceholder.typicode.com/posts",{params} )
+    httpClient.get("https://jsonplaceholder.typicode.com/postsqwewqewq",{params} )
       .subscribe({
         next: datas => console.log(datas),
         error: error => console.log(error)
         
       });
+      
   }
 }

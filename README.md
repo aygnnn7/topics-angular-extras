@@ -317,3 +317,64 @@ effect(() => {
 ### RxJS Interop
 
 Angular introduces interoperability between observables and signals using `toSignal` and `toObservable` functions. It's important to use these functions at the constructor level to avoid errors. Additionally, when using `toSignal`, you may want to provide an initial value using the `initialValue` property.
+
+## Error Handling in Angular
+
+Error handling is a crucial aspect of software applications, and Angular provides mechanisms to handle errors effectively, especially in scenarios like HTTP request processes where server-side errors are common. The default error handling behavior in Angular is provided by the `ErrorHandler` class from `@angular/core`. However, you can customize error handling by creating your own error handler.
+
+### Custom Error Handler
+
+To create a custom error handler, you can implement the `ErrorHandler` interface. Here's an example:
+
+```javascript
+import { ErrorHandler } from '@angular/core';
+
+export class CustomErrorHandler implements ErrorHandler {
+  handleError(error: any): void {
+    console.log(error, "error");
+  }
+}
+```
+
+To make Angular use your custom error handler, you need to define it in the `app.config.ts`:
+
+```javascript
+{
+  provide: ErrorHandler,
+  useClass: CustomErrorHandler
+}
+```
+
+### HTTP Interceptor Error Handling
+When it comes to handling HTTP errors through an interceptor, you can use the `catchError` operator from RxJS to catch errors and take appropriate actions. Here's an example:
+
+```javascript
+export const customHttpInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(
+    catchError(error => {
+      if (error instanceof HttpErrorResponse) {
+        switch (error.status) {
+          case 401:
+            console.log("401 status code");
+            break;
+          case 402:
+            console.log("402 status code");
+            break;
+          case 403:
+            console.log("403 status code");
+            break;
+          case 404:
+            console.log("404 status code");
+            break;
+          default:
+            console.log(`Unhandled status code: ${error.status}`);
+            break;
+        }
+      }
+      return throwError(() => ({ message: error.message }));
+    })
+  );
+};
+```
+
+In this example, the `catchError` operator is used to handle HTTP errors. It checks the status code of the error and takes specific actions based on different status codes. The `throwError` function is used to return an observable that emits an error with a custom message.
