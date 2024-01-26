@@ -378,3 +378,45 @@ export const customHttpInterceptor: HttpInterceptorFn = (req, next) => {
 ```
 
 In this example, the `catchError` operator is used to handle HTTP errors. It checks the status code of the error and takes specific actions based on different status codes. The `throwError` function is used to return an observable that emits an error with a custom message.
+
+## Angular Storages
+In every web architecture, as with API or other external services, we meet our need to store some data on the client side using storages.
+
+### Local Storage
+It is a storage that provides permanent storage in the browser. In other words, the data will remain persistent even if the browser is closed. It stores data in key/value format.
+```javascript
+//inserting data
+localStorage.setItem("name", "john");
+//retrieving data
+const name = localStorage.getItem("name");
+//deleting data
+localStorage.removeItem("name");
+```
+
+### Session Storage
+Provides a storage area valid for the duration of a browser tab. As soon as the browser tab or browser is closed, all the information will be deleted. It stores data in key/value format.
+```javascript
+//inserting data
+sessionStorage.setItem("name", "john");
+//retrieving data
+const name = sessionStorage.getItem("name");
+//deleting data
+sessionStorage.removeItem("name");
+```
+
+### Cache Storage
+Commonly used for temporarily storing data in memory or storage space. Especially in scenarios such as offline operations or performance improvements, Cache storage can be a preferable choice.
+```javascript
+caches.open("user-cache").then(cache => {
+  cache.put("permissions", new Response("['select', 'update']"))
+  
+  cache.match("permissions").then(data => {
+    data.text().then(_data => console.log(_data))
+  })
+})
+```
+### Cookie
+In Angular, cookies require the installation of the `ngx-cookie-service` library into the application.
+Then, we need to provide `CookieService` to the relevant component.
+Afterward, you can use it wherever you want through the `set` and `get` functions.
+

@@ -1,5 +1,4 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { error } from 'console';
 import { catchError, throwError } from 'rxjs';
 
 export const customHttpInterceptor: HttpInterceptorFn = (req, next) => {
@@ -16,7 +15,6 @@ export const customHttpInterceptor: HttpInterceptorFn = (req, next) => {
           case 404: console.log("404 status code");
           break;
         }
-        
       }
       return throwError(()=> {error.message});
     })
