@@ -6,6 +6,7 @@ import { environment } from '../environments/environment';
 import { HttpClientExampleComponent } from './components/http-client-example/http-client-example.component';
 import { SignalsExampleComponent } from './components/signals-example/signals-example.component';
 import { HttpClient } from '@angular/common/http';
+import { JqueryExampleComponent } from './components/jquery-example/jquery-example.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import { HttpClient } from '@angular/common/http';
     C1Component,
     C2Component,
     HttpClientExampleComponent,
-    SignalsExampleComponent
+    SignalsExampleComponent,
+    JqueryExampleComponent
   ],
   template:`
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -64,6 +66,9 @@ import { HttpClient } from '@angular/common/http';
   <app-signals-example></app-signals-example>
   <hr>
   <button (click)="throwError()"> Throw Error</button>
+
+  <hr>
+  <app-jquery-example></app-jquery-example>
   `
 })
 export class AppComponent {

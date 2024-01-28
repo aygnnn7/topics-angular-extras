@@ -420,3 +420,25 @@ In Angular, cookies require the installation of the `ngx-cookie-service` library
 Then, we need to provide `CookieService` to the relevant component.
 Afterward, you can use it wherever you want through the `set` and `get` functions.
 
+## Angular - jQuery
+Although it's not considered a best practice, jQuery can be used in Angular applications.
+Steps to use it:
+1) Install with the command `npm i jquery`.
+2) Then copy the path from the node_modules folder and write it into the angular.json file under scripts.
+```javascript
+scripts:{
+    "node_modules/jquery/dist/jquery.min.js"
+}
+```
+3) To use jQuery within TypeScript, declare it at the top of the code page (right below the Import declarations) like this:
+```javascript
+import {Component} from '@angular/core';
+
+declare var $: any;
+//...
+```
+
+Angular is an architecture that provides DOM manipulation and event management. Therefore, where necessary, you should prioritize using Angular's own methods for the consistency and performance of the applications.
+Furthermore, Angular's features will help you better organize the logic of your application and maintain it more easily.
+Thus, yes, you can use jQuery if needed, but this should not be arbitrary. As mentioned earlier, Angular's features should be the primary choice.
+
