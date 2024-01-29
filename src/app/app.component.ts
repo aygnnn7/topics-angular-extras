@@ -7,6 +7,7 @@ import { HttpClientExampleComponent } from './components/http-client-example/htt
 import { SignalsExampleComponent } from './components/signals-example/signals-example.component';
 import { HttpClient } from '@angular/common/http';
 import { JqueryExampleComponent } from './components/jquery-example/jquery-example.component';
+import { ControlFlowExampleComponent } from './components/control-flow-example/control-flow-example.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { JqueryExampleComponent } from './components/jquery-example/jquery-examp
     C2Component,
     HttpClientExampleComponent,
     SignalsExampleComponent,
-    JqueryExampleComponent
+    //JqueryExampleComponent,
+    ControlFlowExampleComponent
   ],
   template:`
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -67,8 +69,10 @@ import { JqueryExampleComponent } from './components/jquery-example/jquery-examp
   <hr>
   <button (click)="throwError()"> Throw Error</button>
 
+  <!-- <hr> -->
+  <!-- <app-jquery-example></app-jquery-example> -->
   <hr>
-  <app-jquery-example></app-jquery-example>
+  <app-control-flow-example></app-control-flow-example>
   `
 })
 export class AppComponent {

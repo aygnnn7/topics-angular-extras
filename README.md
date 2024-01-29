@@ -442,3 +442,45 @@ Angular is an architecture that provides DOM manipulation and event management. 
 Furthermore, Angular's features will help you better organize the logic of your application and maintain it more easily.
 Thus, yes, you can use jQuery if needed, but this should not be arbitrary. As mentioned earlier, Angular's features should be the primary choice.
 
+## Control Flow Syntax
+With Angular 17, the Control Flow Syntax feature has been introduced, allowing us to use more programmatic structures like if/else, for, and switch, instead of built-in directives such as `*ngIf`, `*ngFor`, and `*ngSwitch`.
+This feature allows us to implement what was previously done with directives using programmatic blocks.
+For example, the old and still usable method:
+```html
+<div *ngIf="condition">
+  <ul>
+    <li *ngFor="let number of numbers">{{number}}</li>
+  </ul>
+</div>
+```
+The new Control Flow Syntax:
+```html
+@if(condition){
+  <div>
+    <ul>
+      @for(number of numbers; track $index){
+        <li>{{number}}</li>
+      }
+    </ul>
+  </div>
+}
+```
+
+With the built-in directives, we convert the template to `ng-template` and then manage them dynamically with `ViewContainer` without realizing it in the background.
+This behavior will have disadvantages such as cost from the compiler's perspective.
+To address this, the Angular team has developed the more efficient Control Flow Syntax, which does the same job without additional compiler load and creates the same view.
+
+In the case where the source of the loop in a for loop is empty, we can use `@empty` to execute the code we specify for this situation.
+For example:
+```html
+<ul>
+  @for (item of ['a','b','c'];track item) {
+    <li>{{item}}</li>
+  }
+  @empty {
+    <li>The provided list is empty.</li>
+  }
+</ul>
+```
+To convert old directive structures to the new syntax, we can issue the following command in the CLI:
+`ng g @angular/core:control-flow`
