@@ -484,3 +484,7 @@ For example:
 ```
 To convert old directive structures to the new syntax, we can issue the following command in the CLI:
 `ng g @angular/core:control-flow`
+
+## What is `@defer`?
+`@defer` is a new feature introduced with Angular 17 as an alternative to the component lazy loading behavior. Functionally, in contrast to the existing lazy loading behavior that is dependent on the router mechanism, it allows us to implement lazy loading behavior in components used over selectors.
+
