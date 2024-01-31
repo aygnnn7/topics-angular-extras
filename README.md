@@ -487,4 +487,54 @@ To convert old directive structures to the new syntax, we can issue the followin
 
 ## What is `@defer`?
 `@defer` is a new feature introduced with Angular 17 as an alternative to the component lazy loading behavior. Functionally, in contrast to the existing lazy loading behavior that is dependent on the router mechanism, it allows us to implement lazy loading behavior in components used over selectors.
+Example Usage of `@defer`:
+```html
+@defer(when state){
+  <app-home></app-home>
+}
+```
+In this example, the parenthesis contains a condition based on which the component referenced by the selector is loaded lazily.
 
+### @placeholder | @loading | @error
+If we want a different view until the loading condition of `@defer` is met, we can use `@placeholder`. Then, while the component is loading, we can use `@loading`, and if we encounter an error during the loading process, we can take necessary measures in the `@error` block.
+
+```html
+@defer(when state){
+  <app-home></app-home>
+}
+@placeholder {
+  .....
+}
+@loading{
+  Loading...
+}
+@error{
+  Error
+}
+```
+### Counteracting Flickering with `after` & `minimum` Usage
+In some cases, the loading of the `@defer` block can be very fast due to the lightness of the content, causing the `@loading` block to appear and disappear quickly, leading to a flickering effect. To prevent this, we can configure when the loading will be displayed and the minimum loading option with the `after` and `minimum` options.
+`after`
+```html
+@loading(after 150ms){
+  Loading...
+}
+```
+`minimum`
+```html
+@loading(minimum 150ms){
+  Loading...
+}
+```
+
+### Conditions for @defer:
+- on idle
+- when
+- on immediate
+- on timer
+- on hover
+- on interaction
+- on viewport
+
+### Prefetching
+With the prefetch feature of `@defer`, we can pre-emptively handle the loading cost of a component but then load it lazily later.
